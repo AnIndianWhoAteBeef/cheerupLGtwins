@@ -366,19 +366,27 @@ news.forEach(n=>{
 });
 
 let cntA=2481,cntB=3104;
-function cheer(team){
-  if(team==='a') cntA++;
-  else cntB++;
-  const total=cntA+cntB;
-  const pA=Math.round(cntA/total*1000)/10;
-  const pB=Math.round(cntB/total*1000)/10;
-  document.getElementById('cnt-a').textContent=cntA.toLocaleString();
-  document.getElementById('cnt-b').textContent=cntB.toLocaleString();
-  document.getElementById('pct-a').textContent=pA+'%';
-  document.getElementById('pct-b').textContent=pB+'%';
-  document.getElementById('cheer-bar-fill').style.width=pA+'%';
-  document.getElementById('total-cheers').textContent=`오늘 총 ${total.toLocaleString()}명 응원 중 🔥`;
-  document.getElementById(team==='a'?'cheer-a':'cheer-b').classList.add('voted');
+async function cheer(team) {
+  const teamName = team === 'a' ? '두산 베어스' : 'LG 트윈스'
+  
+  // Supabase에 저장
+  await supabase.rpc('increment_cheer', {
+    p_team: teamName,
+    p_date: new Date().toISOString().split('T')[0]
+  })
+
+  // 화면 업데이트
+  if(team === 'a') cntA++
+  else cntB++
+  const total = cntA + cntB
+  const pA = Math.round(cntA / total * 1000) / 10
+  const pB = Math.round(cntB / total * 1000) / 10
+  document.getElementById('cnt-a').textContent = cntA.toLocaleString()
+  document.getElementById('cnt-b').textContent = cntB.toLocaleString()
+  document.getElementById('pct-a').textContent = pA + '%'
+  document.getElementById('pct-b').textContent = pB + '%'
+  document.getElementById('cheer-bar-fill').style.width = pA + '%'
+  document.getElementById('total-cheers').textContent = `오늘 총 ${total.toLocaleString()}명 응원 중 🔥`
 }
 
 let scoreA=3,scoreB=5;
