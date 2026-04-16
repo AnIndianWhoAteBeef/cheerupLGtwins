@@ -2,7 +2,8 @@
 <script>
   const SUPABASE_URL = 'https://sramklhthoybxftnajqv.supabase.co'
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyYW1rbGh0aG95YnhmdG5hanF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzQwNjAsImV4cCI6MjA5MTgxMDA2MH0.0OrTC1h7y4cx7LabaJpzgtn0gIAGUl5GTlHuJF26Ads'
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+  const { createClient } = supabase
+  const client = createClient(SUPABASE_URL, SUPABASE_KEY)
 </script>
 
 <style>
@@ -370,7 +371,7 @@ async function cheer(team) {
   const teamName = team === 'a' ? '두산 베어스' : 'LG 트윈스'
   
   // Supabase에 저장
-  await supabase.rpc('increment_cheer', {
+  await client.rpc('increment_cheer', {
     p_team: teamName,
     p_date: new Date().toISOString().split('T')[0]
   })
